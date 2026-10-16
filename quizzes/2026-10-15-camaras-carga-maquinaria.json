@@ -14,26 +14,55 @@
     },
     {
       "text": "¿Cuántas vistas da CM34 + AIM4?",
-      "options": ["4", "6", "8", "10"],
+      "options": [
+        "4",
+        "6",
+        "8",
+        "10"
+      ],
       "answer": 2,
       "time": 10
     },
     {
       "text": "Cliente drop & hook quiere 3 cámaras en el remolque. ¿Qué propones?",
-      "options": ["Wireless Link", "3 pares de Wireless Link", "Pigtail", "CM36"],
+      "options": [
+        "Wireless Link",
+        "3 pares de Wireless Link",
+        "Pigtail",
+        "CM36"
+      ],
       "answer": 3,
       "time": 10
     },
     {
       "text": "Montacargas de cabina abierta que necesita vista en vivo y alertas. ¿Qué configuración va?",
-      "options": ["CM34 + AIM4", "CM36 + VG55", "CM36 + AIM4", "CM34 + Wireless Link"],
+      "options": [
+        "CM34 + AIM4",
+        "CM36 + VG55",
+        "CM36 + AIM4",
+        "CM34 + Wireless Link"
+      ],
       "answer": 3,
       "time": 10
     },
     {
       "text": "¿A qué energía se conecta el AIM4?",
-      "options": ["Ignición", "Accesorios", "Corriente constante de batería (9–36V)", "USB del VG"],
+      "options": [
+        "Ignición",
+        "Accesorios",
+        "Corriente constante de batería (9–36V)",
+        "USB del VG"
+      ],
       "answer": 3,
+      "time": 10
+    },
+    {
+      "text": "El Transmisor Wireless va conectado al Multicam y el Receptor a la cámara.",
+      "options": [
+        "Verdadero",
+        "Falso"
+      ],
+      "answer": 2,
       "time": 10
     }
   ]
