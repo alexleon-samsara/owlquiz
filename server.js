@@ -1,4 +1,4 @@
-// Samsarahoot — servidor de juego en vivo (Express + Socket.IO).
+// Owlquiz — servidor de juego en vivo (Express + Socket.IO).
 // Un solo juego por servidor. Presentador en /host (con PIN), jugadores en /.
 
 const express = require('express');
@@ -541,7 +541,7 @@ io.on('connection', (socket) => {
 
 server.listen(PORT, () => {
   const ip = lanAddress();
-  console.log(`Samsarahoot listo en http://localhost:${PORT}`);
+  console.log(`Owlquiz listo en http://localhost:${PORT}`);
   if (ip) console.log(`En tu red: http://${ip}:${PORT}  (presentador: /host)`);
   console.log(`Quizzes cargados: ${quizzes.size}. PIN del presentador: ${HOST_PIN === 'samsara' ? 'samsara (cámbialo con HOST_PIN)' : 'definido en HOST_PIN'}`);
 });

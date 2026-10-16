@@ -1,4 +1,4 @@
-# Samsarahoot
+# Owlquiz
 
 Juego de preguntas en vivo para presentaciones. Tú proyectas la pantalla del presentador; la gente escanea el QR con su celular, escribe su nombre y juega. Nadie necesita cuenta ni app.
 
@@ -66,7 +66,7 @@ Puntos: correcto = hasta 1000, según la rapidez (mínimo 500). Incorrecto o sin
 
 Pídele a Claude algo así:
 
-> Crea un quiz para Samsarahoot sobre [tema] con [N] preguntas de 4 opciones y 10 segundos cada una. Dame solo el JSON con este formato:
+> Crea un quiz para Owlquiz sobre [tema] con [N] preguntas de 4 opciones y 10 segundos cada una. Dame solo el JSON con este formato:
 > `{"title": "...", "questions": [{"text": "...", "options": ["...", "...", "...", "..."], "answer": 1, "time": 10}]}`
 > `answer` es el número de la opción correcta (1 = primera).
 

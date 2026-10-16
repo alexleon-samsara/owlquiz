@@ -1,5 +1,5 @@
 {
-  "name": "samsarahoot",
+  "name": "owlquiz",
   "version": "1.0.0",
   "description": "Juego de preguntas en vivo estilo Kahoot para presentaciones internas.",
   "main": "server.js",

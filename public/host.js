@@ -1,4 +1,4 @@
-// Samsarahoot — consola del presentador.
+// Owlquiz — consola del presentador.
 const SHAPES = [
   '<svg class="shape" viewBox="0 0 24 24"><path d="M12 2.5 22.5 20.5h-21z"/></svg>',
   '<svg class="shape" viewBox="0 0 24 24"><path d="M12 1.5 22.5 12 12 22.5 1.5 12z"/></svg>',
@@ -256,7 +256,7 @@ $('csvBtn').addEventListener('click', async () => {
   if (!res.ok) return toast('No se pudo generar el CSV.');
   const d = new Date();
   const date = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-  download(`${date}-samsarahoot-resultados.csv`, res.csv, 'text/csv;charset=utf-8');
+  download(`${date}-owlquiz-resultados.csv`, res.csv, 'text/csv;charset=utf-8');
 });
 $('tTime').addEventListener('change', async (e) => {
   const v = e.target.value ? Number(e.target.value) : null;
