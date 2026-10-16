@@ -105,6 +105,9 @@ function render(prev) {
   if (!authed || !S) return;
   $('tAuto').classList.toggle('on', !!S.autoAdvance);
   $('tSound').classList.toggle('on', soundOn);
+  if (document.activeElement !== $('tTime')) $('tTime').value = S.timeOverride ? String(S.timeOverride) : '';
+  $('tTime').parentElement.classList.toggle('on', !!S.timeOverride);
+  $('tReset').classList.toggle('hidden', S.phase === 'lobby');
   const key = `${S.phase}|${S.qIndex}`;
   const changed = key !== staticKey;
   staticKey = key;
@@ -255,7 +258,18 @@ $('csvBtn').addEventListener('click', async () => {
   const date = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   download(`${date}-samsarahoot-resultados.csv`, res.csv, 'text/csv;charset=utf-8');
 });
-$('tAuto').addEventListener('click', () => call('host:settings', { autoAdvance: !(S && S.autoAdvance) }));
+$('tTime').addEventListener('change', async (e) => {
+  const v = e.target.value ? Number(e.target.value) : null;
+  await call('host:settings', { timeOverride: v });
+  if (S && S.phase === 'question') toast('El nuevo tiempo aplica desde la siguiente pregunta.');
+  e.target.blur();
+});
+$('tReset').addEventListener('click', () => {
+  if (!confirm('¿Reiniciar el juego? Se borran los puntos y todos vuelven a la sala de espera.')) return;
+  $('allList').dataset.done = '';
+  call('host:lobby');
+});
+$('tAuto').addEventListener('click',() => call('host:settings', { autoAdvance: !(S && S.autoAdvance) }));
 $('tSound').addEventListener('click', () => {
   soundOn = !soundOn; ls.set('shoot_sound', soundOn ? 'on' : 'off');
   $('tSound').classList.toggle('on', soundOn);

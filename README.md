@@ -49,8 +49,14 @@ PIN por defecto si no defines `HOST_PIN`: `samsara`. Cámbialo.
 4. Se muestra la respuesta correcta, los votos por opción y el Top 5.
 5. **Siguiente** hasta el podio final. **Exportar CSV** guarda quién respondió qué y en cuánto tiempo.
 
-Atajos: **Espacio / Enter / →** = siguiente. Arriba: avance automático, sonido y pantalla completa.
-Toca un nombre en la sala para sacar a alguien.
+Barra de arriba:
+- **Tiempo:** "Del quiz" usa el tiempo de cada pregunta; 10, 15, 20 o 30 s lo cambia para todas. En pleno juego, aplica desde la siguiente pregunta.
+- **Avance automático**, **Sonido**, **Pantalla completa**.
+- **↺ Reiniciar juego** (solo con el juego en curso): borra los puntos y regresa a todos a la sala. Los jugadores siguen conectados.
+
+Atajos: **Espacio / Enter / →** = siguiente. Toca un nombre en la sala para sacar a alguien.
+
+**Jugadores:** no hay límite en el código. Probado con 250 celulares simulados sin retraso. En el plan gratis de Render (CPU muy limitada) apunta a 100 o menos; para grupos más grandes usa un plan pagado.
 
 Puntos: correcto = hasta 1000, según la rapidez (mínimo 500). Incorrecto o sin respuesta = 0.
 

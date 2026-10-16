@@ -14,6 +14,9 @@
   .chip-toggle { display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 99px;
     border: 1.5px solid var(--stone-300); background: #fff; font-weight: 700; font-size: 14px; }
   .chip-toggle.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .chip-toggle.reset { color: var(--bad); border-color: #f2c4c5; }
+  .time-select { border: 0; background: transparent; padding: 0 2px; width: auto; font-weight: 800; cursor: pointer; }
+  .time-select:focus { border: 0; }
   .screen { flex: 1; display: flex; flex-direction: column; padding: 8px 28px 28px; min-height: 0; }
   .card { background: #fff; border-radius: 22px; border: 1.5px solid var(--stone-200); padding: 24px; }
   .muted { color: var(--stone-500); font-weight: 600; }
@@ -130,9 +133,20 @@
 <div class="topbar">
   <div class="brand"><div class="brand-mark">S</div><div class="brand-name">Samsara<span>hoot</span></div></div>
   <div class="controls hidden" id="controls">
+    <label class="chip-toggle" title="Tiempo para responder cada pregunta. Si cambias en pleno juego, aplica desde la siguiente.">
+      Tiempo
+      <select id="tTime" class="time-select">
+        <option value="">Del quiz</option>
+        <option value="10">10 s</option>
+        <option value="15">15 s</option>
+        <option value="20">20 s</option>
+        <option value="30">30 s</option>
+      </select>
+    </label>
     <button class="chip-toggle" id="tAuto" title="Pasar solo a la siguiente pregunta">Avance automático</button>
     <button class="chip-toggle on" id="tSound">Sonido</button>
     <button class="chip-toggle" id="tFull">Pantalla completa</button>
+    <button class="chip-toggle reset hidden" id="tReset" title="Volver a la sala con los puntos en cero">↺ Reiniciar juego</button>
   </div>
 </div>
 

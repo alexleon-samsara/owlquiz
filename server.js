@@ -16,6 +16,7 @@ const PUBLIC_URL = (process.env.PUBLIC_URL || '').replace(/\/+$/, '');
 const QUIZ_DIR = path.join(__dirname, 'quizzes');
 const REVEAL_AUTO_MS = 7000; // espera en avance automático
 const GRACE_MS = 600; // tolerancia de red al cerrar una pregunta
+const TIME_CHOICES = [10, 15, 20, 30];
 
 const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
@@ -112,6 +113,8 @@ const game = {
   endsAt: 0,
   answers: new Map(), // playerId -> { choice, ms }
   autoAdvance: false,
+  timeOverride: null, // null = tiempo de cada pregunta; o 10/15/20/30
+  duration: 0, // segundos de la pregunta actual
   revealEndsAt: 0,
 };
 let questionTimer = null;
@@ -169,9 +172,10 @@ function startQuestion(index) {
   game.qIndex = index;
   game.answers = new Map();
   game.startedAt = Date.now();
-  game.endsAt = game.startedAt + q.time * 1000;
+  game.duration = game.timeOverride || q.time;
+  game.endsAt = game.startedAt + game.duration * 1000;
   for (const p of players.values()) p.last = null;
-  questionTimer = setTimeout(endQuestion, q.time * 1000 + GRACE_MS);
+  questionTimer = setTimeout(endQuestion, game.duration * 1000 + GRACE_MS);
   broadcast(true);
 }
 
@@ -179,7 +183,7 @@ function endQuestion() {
   if (game.phase !== 'question') return;
   clearTimers();
   const q = currentQuestion();
-  const duration = q.time * 1000;
+  const duration = game.duration * 1000;
   for (const p of players.values()) {
     const a = game.answers.get(p.id);
     let points = 0;
@@ -248,7 +252,7 @@ function publicState() {
     serverNow: Date.now(),
   };
   if (q && (game.phase === 'question' || game.phase === 'reveal')) {
-    s.question = { text: q.text, options: q.options, time: q.time };
+    s.question = { text: q.text, options: q.options, time: game.duration };
     s.endsAt = game.endsAt;
     s.answeredCount = game.answers.size;
   }
@@ -277,6 +281,8 @@ function hostState() {
   return {
     ...publicState(),
     autoAdvance: game.autoAdvance,
+    timeOverride: game.timeOverride,
+    timeChoices: TIME_CHOICES,
     quizId: game.quizId,
     quizzes: quizList(),
     joinUrl, qrDataUrl,
@@ -443,7 +449,12 @@ io.on('connection', (socket) => {
   socket.on('host:lobby', hostOnly((data, ack) => { backToLobby(); ack && ack({ ok: true }); }));
 
   socket.on('host:settings', hostOnly((data, ack) => {
-    game.autoAdvance = !!(data && data.autoAdvance);
+    if (data && 'timeOverride' in data) {
+      const t = Number(data.timeOverride);
+      game.timeOverride = TIME_CHOICES.includes(t) ? t : null; // aplica desde la siguiente pregunta
+    }
+    if (!data || !('autoAdvance' in data)) { broadcast(true); return ack && ack({ ok: true }); }
+    game.autoAdvance = !!data.autoAdvance;
     if (game.phase === 'reveal') {
       clearTimeout(advanceTimer);
       advanceTimer = null;
