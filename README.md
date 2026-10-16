@@ -15,8 +15,8 @@ Así funciona con los datos del celular o con cualquier Wi-Fi. Gratis en Render.
 2. Entra a [render.com](https://render.com) con tu cuenta de GitHub.
 3. **New → Blueprint** → elige el repositorio. Render lee `render.yaml`.
 4. Te pide `HOST_PIN`: escribe el PIN que usarás para abrir la consola.
-5. **Apply**. En 2–3 minutos te da una URL, por ejemplo `https://samsarahoot.onrender.com`.
-6. Abre `https://samsarahoot.onrender.com/host`, escribe tu PIN y listo.
+5. **Apply**. En 2–3 minutos te da una URL, por ejemplo `https://owlquiz.onrender.com`.
+6. Abre `https://owlquiz.onrender.com/host`, escribe tu PIN y listo.
 
 **Importante en el plan gratis:**
 - Se duerme tras 15 minutos sin uso. Abre `/host` **1–2 minutos antes** de presentar para despertarlo.

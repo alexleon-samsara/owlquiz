@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: samsarahoot
+    name: owlquiz
     runtime: node
     plan: free
     buildCommand: npm install
