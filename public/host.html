@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Samsarahoot · Presentador</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<style>
+  body { min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+  .topbar { display: flex; justify-content: space-between; align-items: center; padding: 14px 28px; gap: 16px; }
+  .topbar .controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .chip-toggle { display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 99px;
+    border: 1.5px solid var(--stone-300); background: #fff; font-weight: 700; font-size: 14px; }
+  .chip-toggle.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .screen { flex: 1; display: flex; flex-direction: column; padding: 8px 28px 28px; min-height: 0; }
+  .card { background: #fff; border-radius: 22px; border: 1.5px solid var(--stone-200); padding: 24px; }
+  .muted { color: var(--stone-500); font-weight: 600; }
+  h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
+
+  /* PIN */
+  .pin-wrap { flex: 1; display: grid; place-items: center; }
+  .pin-card { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 12px; text-align: center; }
+  .pin-card input { text-align: center; font-size: 22px; font-weight: 700; }
+
+  /* Sala */
+  .lobby { flex: 1; display: grid; grid-template-columns: minmax(320px, 0.9fr) 1.1fr; gap: 24px; min-height: 0; }
+  .qr-card { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; text-align: center; }
+  .qr-card img { width: min(100%, 46vh); aspect-ratio: 1; border-radius: 16px; background: #fff; image-rendering: pixelated; }
+  .join-url { font-size: clamp(18px, 2.2vw, 30px); font-weight: 800; word-break: break-all; }
+  .scan { font-size: clamp(22px, 2.6vw, 36px); font-weight: 900; }
+  .side { display: flex; flex-direction: column; gap: 18px; min-height: 0; }
+  .setup { display: flex; flex-direction: column; gap: 12px; }
+  .setup-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .setup-row select { flex: 1; min-width: 220px; font-weight: 700; font-size: 18px; }
+  .players-card { flex: 1; display: flex; flex-direction: column; min-height: 200px; }
+  .players-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; }
+  .count-big { font-size: 44px; font-weight: 900; }
+  .players { display: flex; flex-wrap: wrap; gap: 10px; align-content: flex-start; overflow: auto; }
+  .pchip { background: var(--yellow-soft); border: 0; border-radius: 99px; padding: 9px 16px; font-weight: 800; font-size: 18px;
+    animation: pop .25s ease; }
+  .pchip.off { opacity: .45; }
+  .pchip:hover { background: #ffd9d9; text-decoration: line-through; }
+  @keyframes pop { from { transform: scale(.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+  /* Pregunta */
+  .q-meta { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 20px; color: var(--stone-500); }
+  .q-title { font-size: clamp(30px, 3.6vw, 58px); font-weight: 900; text-align: center; margin: 3vh auto 2vh; max-width: 1400px; line-height: 1.12; }
+  .q-mid { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5vh; gap: 20px; }
+  .timer { width: clamp(110px, 11vw, 170px); aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center;
+    background: conic-gradient(var(--yellow) var(--p, 100%), var(--stone-200) 0); }
+  .timer span { width: 80%; aspect-ratio: 1; border-radius: 50%; background: var(--stone-50); display: grid; place-items: center;
+    font-size: clamp(40px, 4.4vw, 72px); font-weight: 900; }
+  .answered-box { text-align: center; }
+  .answered-box b { display: block; font-size: clamp(40px, 4.4vw, 72px); font-weight: 900; line-height: 1; }
+  .opts { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; min-height: 0; }
+  .opt { background: var(--opt); color: var(--opt-ink); border-radius: 18px; display: flex; align-items: center; gap: 20px;
+    padding: 2.4vh 28px; font-size: clamp(22px, 2.3vw, 38px); font-weight: 800; position: relative; overflow: hidden;
+    box-shadow: inset 0 -6px 0 rgba(0,0,0,.16); transition: opacity .3s; }
+  .opt .shape { font-size: 1.4em; }
+  .opt.dim { opacity: .28; }
+  .opt .mark { margin-left: auto; font-size: 1.2em; }
+  .opt .cnt { margin-left: auto; font-weight: 900; }
+  .bottom { display: flex; justify-content: flex-end; align-items: center; gap: 14px; margin-top: 18px; }
+
+  /* Resultado de la pregunta */
+  .reveal { flex: 1; display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 24px; min-height: 0; }
+  .reveal .opts { grid-template-columns: 1fr; gap: 12px; }
+  .bar-row { display: flex; flex-direction: column; justify-content: center; gap: 8px; }
+  .bar-track { height: 12px; background: rgba(0,0,0,.14); border-radius: 99px; overflow: hidden; }
+  .bar-track div { height: 100%; background: currentColor; border-radius: 99px; width: 0; transition: width .8s ease; }
+  .lb { display: flex; flex-direction: column; gap: 10px; }
+  .lb-row { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 14px; background: var(--stone-100);
+    font-size: clamp(18px, 1.7vw, 26px); font-weight: 800; animation: slide .35s ease both; }
+  .lb-row:nth-child(1) { background: var(--yellow); }
+  .lb-row .r { width: 1.6em; text-align: center; font-weight: 900; }
+  .lb-row .n { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .lb-row .g { font-size: .75em; color: var(--green); }
+  .lb-row:nth-child(1) .g { color: var(--ink); }
+  @keyframes slide { from { transform: translateX(30px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+  /* Final */
+  .final { flex: 1; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 24px; min-height: 0; }
+  .podium { display: flex; align-items: flex-end; justify-content: center; gap: 18px; padding-top: 4vh; }
+  .step { width: 30%; max-width: 260px; display: flex; flex-direction: column; align-items: center; gap: 10px; animation: rise .7s ease both; }
+  .step .who { font-size: clamp(20px, 2vw, 32px); font-weight: 900; text-align: center; word-break: break-word; }
+  .step .pts { font-weight: 700; color: var(--stone-500); font-size: 18px; }
+  .block { width: 100%; border-radius: 16px 16px 0 0; display: grid; place-items: start center; padding-top: 14px;
+    font-size: clamp(40px, 4vw, 64px); font-weight: 900; }
+  .p1 .block { height: 34vh; background: var(--yellow); }
+  .p2 .block { height: 24vh; background: var(--stone-300); }
+  .p3 .block { height: 17vh; background: #e6c8a6; }
+  .p2 { animation-delay: .2s; } .p1 { animation-delay: .5s; }
+  @keyframes rise { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .all { overflow: auto; display: flex; flex-direction: column; gap: 6px; }
+  .all-row { display: flex; gap: 12px; padding: 8px 12px; border-radius: 10px; background: var(--stone-100); font-weight: 700; }
+  .all-row .n { flex: 1; }
+
+  /* Editor */
+  .overlay { position: fixed; inset: 0; background: rgba(31,29,26,.45); display: flex; justify-content: center; align-items: flex-start;
+    padding: 4vh 16px; z-index: 50; overflow: auto; }
+  .panel { width: 100%; max-width: 920px; background: var(--stone-50); border-radius: 22px; padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+  .panel-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .qz-row { display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: #fff; border-radius: 14px; border: 1.5px solid var(--stone-200); flex-wrap: wrap; }
+  .qz-row .t { flex: 1; font-weight: 800; min-width: 200px; }
+  .qcard { background: #fff; border-radius: 16px; border: 1.5px solid var(--stone-200); padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .qcard-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-weight: 800; }
+  .qcard textarea { min-height: 60px; resize: vertical; }
+  .opt-edit { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .opt-in { display: flex; align-items: center; gap: 8px; }
+  .opt-in .sw { width: 32px; height: 32px; border-radius: 8px; background: var(--opt); color: var(--opt-ink); display: grid; place-items: center; flex: none; }
+  .opt-in input[type=text] { padding: 9px 11px; }
+  .opt-in label { display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 700; color: var(--stone-500); white-space: nowrap; }
+  .time-in { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--stone-500); }
+  .time-in input { width: 90px; padding: 8px 10px; }
+  .help { font-size: 14px; color: var(--stone-700); background: var(--yellow-soft); border-radius: 12px; padding: 12px 14px; line-height: 1.45; }
+  .help code { background: #fff; padding: 1px 5px; border-radius: 5px; }
+  textarea.json { min-height: 260px; font-family: ui-monospace, Menlo, monospace; font-size: 13px; }
+
+  @media (max-width: 900px) {
+    .lobby, .reveal, .final { grid-template-columns: 1fr; }
+    .opts { grid-template-columns: 1fr; }
+    .opt-edit { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div id="offline" class="offline hidden">Sin conexión con el servidor. Reconectando…</div>
+<div class="topbar">
+  <div class="brand"><div class="brand-mark">S</div><div class="brand-name">Samsara<span>hoot</span></div></div>
+  <div class="controls hidden" id="controls">
+    <button class="chip-toggle" id="tAuto" title="Pasar solo a la siguiente pregunta">Avance automático</button>
+    <button class="chip-toggle on" id="tSound">Sonido</button>
+    <button class="chip-toggle" id="tFull">Pantalla completa</button>
+  </div>
+</div>
+
+<!-- PIN -->
+<section class="screen" id="sPin">
+  <div class="pin-wrap">
+    <form class="card pin-card" id="pinForm">
+      <h2>Presentador</h2>
+      <p class="muted">Escribe el PIN para abrir la consola</p>
+      <input id="pinInput" type="password" placeholder="PIN" autocomplete="current-password" autofocus>
+      <button class="btn btn-yellow btn-lg" type="submit">Entrar</button>
+    </form>
+  </div>
+</section>
+
+<!-- Sala de espera -->
+<section class="screen hidden" id="sLobby">
+  <div class="lobby">
+    <div class="card qr-card">
+      <div class="scan">Escanea para jugar</div>
+      <img id="qr" alt="Código QR para entrar al juego">
+      <div class="muted">o entra en</div>
+      <div class="join-url" id="joinUrl"></div>
+    </div>
+    <div class="side">
+      <div class="card setup">
+        <div class="muted">Quiz</div>
+        <div class="setup-row">
+          <select id="quizSelect"></select>
+          <button class="btn btn-ghost" id="openEditor">Editar quizzes</button>
+        </div>
+        <button class="btn btn-yellow btn-lg" id="startBtn">Iniciar juego ▶</button>
+      </div>
+      <div class="card players-card">
+        <div class="players-head">
+          <div><span class="count-big" id="pCount">0</span> <span class="muted" id="pLabel">jugadores</span></div>
+          <span class="muted" style="font-size:14px">Toca un nombre para sacarlo</span>
+        </div>
+        <div class="players" id="players"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pregunta -->
+<section class="screen hidden" id="sQuestion">
+  <div class="q-meta"><span id="qNum"></span><span id="qQuiz"></span></div>
+  <div class="q-title" id="qText"></div>
+  <div class="q-mid">
+    <div class="timer" id="timer"><span id="timerNum">10</span></div>
+    <div class="answered-box"><b id="answered">0</b><span class="muted">respuestas</span></div>
+  </div>
+  <div class="opts" id="qOpts"></div>
+  <div class="bottom"><button class="btn btn-ghost" id="endQ">Terminar pregunta</button></div>
+</section>
+
+<!-- Resultado -->
+<section class="screen hidden" id="sReveal">
+  <div class="q-meta"><span id="rNum"></span><span id="rAuto"></span></div>
+  <div class="q-title" id="rText" style="font-size:clamp(24px,2.6vw,42px);margin:2vh auto"></div>
+  <div class="reveal">
+    <div class="opts" id="rOpts"></div>
+    <div class="card"><h3 style="margin-bottom:14px">Top 5</h3><div class="lb" id="lb"></div></div>
+  </div>
+  <div class="bottom"><button class="btn btn-yellow btn-lg" id="nextBtn">Siguiente ▶</button></div>
+</section>
+
+<!-- Final -->
+<section class="screen hidden" id="sFinal">
+  <h1 style="text-align:center;font-size:clamp(32px,3.4vw,54px)">🏆 Resultados</h1>
+  <div class="final">
+    <div class="podium" id="podium"></div>
+    <div class="card" style="display:flex;flex-direction:column;min-height:0">
+      <h3 style="margin-bottom:12px">Todos</h3>
+      <div class="all" id="allList"></div>
+    </div>
+  </div>
+  <div class="bottom">
+    <button class="btn btn-ghost" id="csvBtn">Exportar CSV</button>
+    <button class="btn btn-yellow btn-lg" id="lobbyBtn">Volver a la sala</button>
+  </div>
+</section>
+
+<!-- Editor -->
+<div class="overlay hidden" id="editor"><div class="panel" id="panel"></div></div>
+<div id="toast" class="toast hidden"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/host.js"></script>
+</body>
+</html>

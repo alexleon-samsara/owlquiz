@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#feae0f">
+<title>Samsarahoot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<style>
+  body { min-height: 100dvh; display: flex; flex-direction: column; }
+  header { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; }
+  .score-pill { background: var(--ink); color: #fff; border-radius: 99px; padding: 6px 12px; font-weight: 700; font-size: 15px; }
+  main { flex: 1; display: flex; flex-direction: column; padding: 0 16px 16px; }
+  .center { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 14px; }
+  h1 { font-size: 30px; margin: 0; letter-spacing: -0.02em; }
+  .muted { color: var(--stone-500); font-weight: 600; }
+  .join-card { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 12px; }
+  .join-card input { font-size: 20px; padding: 16px; text-align: center; font-weight: 700; }
+  .join-card .btn { font-size: 20px; padding: 16px; }
+  .big-emoji { font-size: 64px; line-height: 1; }
+  .q-head { display: flex; justify-content: space-between; align-items: center; font-weight: 700; color: var(--stone-500); margin-bottom: 8px; }
+  .q-text { font-size: 20px; font-weight: 800; margin: 12px 0 14px; line-height: 1.25; letter-spacing: -0.01em; }
+  .answers { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; min-height: 280px; }
+  .answers.two { grid-template-columns: 1fr; }
+  .ans {
+    border: 0; border-radius: var(--radius); background: var(--opt); color: var(--opt-ink);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    padding: 12px; font-weight: 800; font-size: 17px; line-height: 1.2; text-align: center;
+    box-shadow: inset 0 -5px 0 rgba(0,0,0,.18);
+  }
+  .ans .shape { font-size: 38px; }
+  .ans:active { transform: scale(.97); }
+  .chosen { width: 120px; height: 120px; border-radius: 28px; display: grid; place-items: center; background: var(--opt); color: var(--opt-ink); }
+  .chosen .shape { font-size: 64px; }
+  .result { width: 100%; max-width: 420px; border-radius: 22px; padding: 28px 20px; color: #fff; }
+  .result.ok { background: var(--ok); }
+  .result.bad { background: var(--bad); }
+  .result.none { background: var(--charcoal); }
+  .result h2 { margin: 0 0 6px; font-size: 34px; }
+  .result .pts { font-size: 26px; font-weight: 800; }
+  .stats { display: flex; gap: 10px; width: 100%; max-width: 420px; }
+  .stat { flex: 1; background: #fff; border-radius: 16px; padding: 14px; border: 1.5px solid var(--stone-200); }
+  .stat b { display: block; font-size: 26px; }
+  .stat span { color: var(--stone-500); font-weight: 600; font-size: 14px; }
+  .place { font-size: 72px; font-weight: 900; letter-spacing: -0.04em; }
+  .link { background: none; border: 0; color: var(--stone-500); font-weight: 600; text-decoration: underline; padding: 8px; }
+</style>
+</head>
+<body>
+<div id="offline" class="offline hidden">Reconectando…</div>
+<header>
+  <div class="brand"><div class="brand-mark">S</div><div class="brand-name">Samsara<span>hoot</span></div></div>
+  <div id="scorePill" class="score-pill hidden">0 pts</div>
+</header>
+<main id="app"></main>
+<div id="toast" class="toast hidden"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+const SHAPES = [
+  '<svg class="shape" viewBox="0 0 24 24"><path d="M12 2.5 22.5 20.5h-21z"/></svg>',
+  '<svg class="shape" viewBox="0 0 24 24"><path d="M12 1.5 22.5 12 12 22.5 1.5 12z"/></svg>',
+  '<svg class="shape" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10.5"/></svg>',
+  '<svg class="shape" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.5"/></svg>',
+];
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
+  del(k) { try { localStorage.removeItem(k); } catch (e) {} },
+};
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fmt = (n) => Number(n || 0).toLocaleString('es-MX');
+const ordinal = (n) => n ? `${n}º` : '–';
+
+const app = document.getElementById('app');
+const socket = io({ transports: ['websocket', 'polling'] });
+let me = { id: store.get('shoot_id'), name: store.get('shoot_name'), joined: false };
+let state = null;
+let offset = 0;
+let pendingChoice = null;
+let timerRaf = null;
+let lastKey = '';
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.remove('hidden');
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.add('hidden'), 2800);
+}
+
+function join(name) {
+  socket.emit('player:join', { id: me.id, name }, (res) => {
+    if (!res || !res.ok) { toast((res && res.error) || 'No se pudo entrar.'); renderJoin(name); return; }
+    me = { id: res.id, name: res.name, joined: true };
+    store.set('shoot_id', res.id); store.set('shoot_name', res.name);
+    if (res.name !== name) toast(`Ese nombre ya estaba. Eres “${res.name}”.`);
+    render(true);
+  });
+}
+
+socket.on('connect', () => {
+  document.getElementById('offline').classList.add('hidden');
+  if (me.id && me.name) join(me.name); else renderJoin('');
+});
+socket.on('disconnect', () => document.getElementById('offline').classList.remove('hidden'));
+socket.on('state', (s) => {
+  offset = s.serverNow - Date.now();
+  state = s;
+  if (s.me) { me.name = s.me.name; }
+  render(false);
+});
+socket.on('player:kicked', () => {
+  store.del('shoot_id'); store.del('shoot_name');
+  me = { id: null, name: null, joined: false };
+  toast('El presentador te sacó del juego.');
+  renderJoin('');
+});
+socket.on('player:replaced', () => {
+  me.joined = false;
+  socket.disconnect();
+  app.innerHTML = `<div class="center"><div class="big-emoji">📱</div><h1>Abriste el juego en otra pestaña</h1>
+    <p class="muted">Sigue jugando allá.</p></div>`;
+});
+
+function renderJoin(prefill) {
+  stopTimer(); lastKey = 'join';
+  document.getElementById('scorePill').classList.add('hidden');
+  app.innerHTML = `
+    <div class="center">
+      <h1>¡Bienvenido!</h1>
+      <p class="muted">Escribe tu nombre para jugar</p>
+      <form class="join-card" id="joinForm" autocomplete="off">
+        <input id="nameInput" type="text" maxlength="20" placeholder="Tu nombre" value="${esc(prefill || '')}" autofocus>
+        <button class="btn btn-yellow" type="submit">Entrar</button>
+      </form>
+    </div>`;
+  const input = document.getElementById('nameInput');
+  document.getElementById('joinForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = input.value.trim();
+    if (!name) { input.focus(); return; }
+    join(name);
+  });
+}
+
+function render(force) {
+  if (!me.joined || !state) return;
+  const s = state, m = s.me || {};
+  const pill = document.getElementById('scorePill');
+  pill.textContent = `${fmt(m.score)} pts`; pill.classList.remove('hidden');
+
+  let screen = s.phase;
+  if (s.phase === 'question' && (m.answered || pendingChoice)) screen = 'answered';
+  const key = [screen, s.qIndex, m.score, m.rank, m.choice, s.playerCount].join('|');
+  if (!force && key === lastKey) return;
+  if (screen !== 'question') stopTimer();
+  if (screen !== 'question' && screen !== 'answered') pendingChoice = null;
+  lastKey = key;
+
+  if (screen === 'lobby') {
+    app.innerHTML = `<div class="center">
+      <div class="big-emoji">✅</div>
+      <h1>¡Listo, ${esc(me.name)}!</h1>
+      <p class="muted">Ya estás dentro. Mira la pantalla:<br>el juego empieza en un momento.</p>
+      <p class="muted">${s.playerCount} ${s.playerCount === 1 ? 'jugador conectado' : 'jugadores conectados'}</p>
+      <button class="link" id="leave">Cambiar nombre</button>
+    </div>`;
+    document.getElementById('leave').onclick = () => {
+      socket.emit('player:leave');
+      store.del('shoot_id'); store.del('shoot_name');
+      me = { id: null, name: null, joined: false };
+      renderJoin('');
+    };
+    return;
+  }
+
+  if (screen === 'question') {
+    const q = s.question;
+    app.innerHTML = `
+      <div class="q-head"><span>Pregunta ${s.qIndex + 1} de ${s.total}</span><span id="secs"></span></div>
+      <div class="timebar"><div id="bar"></div></div>
+      <div class="q-text">${esc(q.text)}</div>
+      <div class="answers ${q.options.length === 2 ? 'two' : ''}">
+        ${q.options.map((o, i) => `<button class="ans opt-${i}" data-c="${i + 1}">${SHAPES[i]}<span>${esc(o)}</span></button>`).join('')}
+      </div>`;
+    app.querySelectorAll('.ans').forEach((b) => b.addEventListener('click', () => answer(Number(b.dataset.c))));
+    startTimer();
+    return;
+  }
+
+  if (screen === 'answered') {
+    const c = m.choice || pendingChoice;
+    app.innerHTML = `<div class="center">
+      <div class="chosen opt-${c - 1}">${SHAPES[c - 1]}</div>
+      <h1>Respuesta enviada</h1>
+      <p class="muted">Espera a que termine el tiempo…</p>
+    </div>`;
+    return;
+  }
+
+  if (screen === 'reveal') {
+    const last = m.last || { answered: false };
+    const cls = !last.answered ? 'none' : last.correct ? 'ok' : 'bad';
+    const title = !last.answered ? 'Sin respuesta' : last.correct ? '¡Correcto!' : 'Incorrecto';
+    const pts = last.correct ? `+${fmt(last.points)} pts` : '+0 pts';
+    app.innerHTML = `<div class="center">
+      <div class="result ${cls}"><h2>${title}</h2><div class="pts">${pts}</div>
+        ${m.streak >= 2 ? `<div style="margin-top:8px;font-weight:700">🔥 Racha de ${m.streak}</div>` : ''}</div>
+      <div class="stats">
+        <div class="stat"><b>${ordinal(m.rank)}</b><span>de ${m.total} lugar</span></div>
+        <div class="stat"><b>${fmt(m.score)}</b><span>puntos</span></div>
+      </div>
+      <p class="muted">${s.isLast ? 'Última pregunta. Mira la pantalla.' : 'Mira la pantalla para la siguiente.'}</p>
+    </div>`;
+    return;
+  }
+
+  if (screen === 'final') {
+    const medal = m.rank === 1 ? '🥇' : m.rank === 2 ? '🥈' : m.rank === 3 ? '🥉' : '🏁';
+    app.innerHTML = `<div class="center">
+      <div class="big-emoji">${medal}</div>
+      <p class="muted">Terminaste en</p>
+      <div class="place">${ordinal(m.rank)}</div>
+      <p class="muted">de ${m.total} jugadores · ${fmt(m.score)} puntos</p>
+      <h1>¡Gracias por jugar!</h1>
+    </div>`;
+  }
+}
+
+function answer(choice) {
+  if (pendingChoice) return;
+  pendingChoice = choice;
+  if (navigator.vibrate) navigator.vibrate(30);
+  render(true);
+  socket.emit('player:answer', { choice }, (res) => {
+    if (!res || !res.ok) {
+      pendingChoice = null;
+      if (res && res.late) toast('Se acabó el tiempo.');
+      render(true);
+    }
+  });
+}
+
+function startTimer() {
+  stopTimer();
+  const tick = () => {
+    if (!state || state.phase !== 'question') return;
+    const total = state.question.time * 1000;
+    const left = Math.max(0, state.endsAt - (Date.now() + offset));
+    const bar = document.getElementById('bar');
+    const secs = document.getElementById('secs');
+    if (bar) bar.style.width = `${(left / total) * 100}%`;
+    if (secs) secs.textContent = `${Math.ceil(left / 1000)} s`;
+    timerRaf = requestAnimationFrame(tick);
+  };
+  tick();
+}
+function stopTimer() { if (timerRaf) cancelAnimationFrame(timerRaf); timerRaf = null; }
+</script>
+</body>
+</html>
