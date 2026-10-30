@@ -4,7 +4,8 @@
   "description": "Juego de preguntas en vivo estilo Kahoot para presentaciones internas.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "loadtest": "node scripts/loadtest.js"
   },
   "engines": {
     "node": ">=18"
@@ -13,5 +14,8 @@
     "express": "^4.21.2",
     "qrcode": "^1.5.4",
     "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "socket.io-client": "^4.8.4"
   }
 }

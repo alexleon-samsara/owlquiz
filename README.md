@@ -56,9 +56,29 @@ Barra de arriba:
 
 Atajos: **Espacio / Enter / →** = siguiente. Toca un nombre en la sala para sacar a alguien.
 
-**Jugadores:** no hay límite en el código. Probado con 250 celulares simulados sin retraso. En el plan gratis de Render (CPU muy limitada) apunta a 100 o menos; para grupos más grandes usa un plan pagado.
+**Jugadores:** no hay límite en el código. Probado con 300 celulares simulados con la CPU del plan gratis de Render (0.1 CPU): la pregunta llega en menos de 0.5 s. Antes de un evento grande, corre la prueba de carga (abajo).
 
 Puntos: correcto = hasta 1000, según la rapidez (mínimo 500). Incorrecto o sin respuesta = 0.
+
+---
+
+## Prueba de carga
+
+Simula muchos celulares contra tu servidor y mide si aguanta. Córrela desde tu laptop, nunca durante un juego real (si hay uno en curso, no corre).
+
+```
+npm install
+node scripts/loadtest.js https://owlquiz.onrender.com TU_PIN --max 200 --step 50
+```
+
+- Sube por niveles (50 → 100 → 150 → 200) y en cada uno juega 2 preguntas.
+- Mide cuánto tarda cada celular en entrar, en recibir la pregunta y en que le acepten la respuesta.
+- Un nivel **pasa** si todos entran, nadie se desconecta, el 95 % recibe la pregunta en menos de 1 s y nadie tarda más de 3 s.
+- Para buscar el límite, sube `--max` (por ejemplo `--max 500 --step 100`). Se detiene en el primer nivel que falla.
+- Al terminar saca a los bots y deja el tiempo y el avance automático como estaban.
+- Opciones: `--questions N` (preguntas por nivel), `--force` (corre aunque haya juego; lo reinicia).
+
+Si falla en el plan gratis, sube la instancia a Starter (0.5 CPU) en Render → Settings → Instance Type solo para el evento.
 
 ---
 

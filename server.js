@@ -388,7 +388,9 @@ io.on('connection', (socket) => {
     p.connected = true;
     socket.data.playerId = p.id;
     ack({ ok: true, id: p.id, name: p.name });
-    broadcast(true);
+    // Su pantalla ya; los demás reciben el aviso agrupado (evita N² mensajes cuando entran muchos a la vez).
+    socket.emit('state', { ...publicState(), me: meState(p) });
+    broadcast(false);
   });
 
   socket.on('player:answer', (data, ack) => {
