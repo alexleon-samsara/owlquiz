@@ -1,0 +1,51 @@
+{
+  "title": "Estudio de Agentes · Academia Samsara CDMX",
+  "questions": [
+    {
+      "text": "¿Cómo habla un agente de voz con el conductor?",
+      "options": [
+        "Por mensaje de texto (SMS)",
+        "Con una llamada de ida y vuelta por la cámara de tablero",
+        "Con una notificación en la app del conductor",
+        "Por correo a su gerente"
+      ],
+      "answer": 2,
+      "time": 10
+    },
+    {
+      "text": "¿A quién asisten los agentes de chat?",
+      "options": [
+        "A los conductores en ruta",
+        "A los gerentes y supervisores",
+        "A los técnicos del taller",
+        "A los clientes finales de la flota"
+      ],
+      "answer": 2,
+      "time": 10
+    },
+    {
+      "text": "¿Dónde guardas una respuesta o reporte como página que todo tu equipo pueda consultar?",
+      "options": ["Asistente Samsara", "Estudio de Agentes", "Espacios de Samsara", "Conectores (MCP)"],
+      "answer": 3,
+      "time": 15
+    },
+    {
+      "text": "Quieres que tu ERP, TMS o tarjetas de combustible estén en el mismo contexto que Samsara. ¿Qué usas?",
+      "options": ["Espacios de Samsara", "Conectores (MCP)", "Asistente Samsara", "Estudio de Agentes"],
+      "answer": 2,
+      "time": 15
+    },
+    {
+      "text": "Para crear un agente desde cero en el Estudio de Agentes hay que saber programar.",
+      "options": ["Verdadero", "Falso"],
+      "answer": 2,
+      "time": 10
+    },
+    {
+      "text": "Antes de publicar un agente nuevo, ¿dónde lo pruebas?",
+      "options": ["En el Playground", "En el Marketplace", "En el Centro de Incidentes", "En la app del conductor"],
+      "answer": 1,
+      "time": 10
+    }
+  ]
+}
