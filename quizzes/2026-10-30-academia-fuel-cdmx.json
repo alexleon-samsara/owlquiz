@@ -1,0 +1,80 @@
+{
+  "title": "Academia Samsara · Eficiencia de Combustible CDMX",
+  "questions": [
+    {
+      "text": "Según la ATA, ¿qué diferencia de eficiencia hay entre el conductor más eficiente y el menos eficiente?",
+      "options": ["5 %", "15 %", "35 %", "60 %"],
+      "answer": 3,
+      "time": 10
+    },
+    {
+      "text": "En la nueva Puntuación de Eficiencia de Conducción, ¿cuánto pesa el ralentí improductivo?",
+      "options": ["10 %", "30 %", "50 %", "70 %"],
+      "answer": 2,
+      "time": 10
+    },
+    {
+      "text": "¿Contra quién compara Samsara a cada conductor para calcular su objetivo?",
+      "options": [
+        "Contra el promedio de su flota",
+        "Contra el 20 % con mejor desempeño en condiciones similares",
+        "Contra su propio desempeño del mes anterior",
+        "Contra el rendimiento que indica el fabricante"
+      ],
+      "answer": 2,
+      "time": 15
+    },
+    {
+      "text": "Con severidad Agresiva, ¿con cuánto combustible de más sobre su objetivo un conductor obtiene 0?",
+      "options": ["10 %", "20 %", "30 %", "40 %"],
+      "answer": 2,
+      "time": 10
+    },
+    {
+      "text": "¿A partir de qué velocidad cuenta el \"exceso de velocidad ineficiente\" en la nueva puntuación?",
+      "options": ["80 km/h", "90 km/h", "100 km/h", "120 km/h"],
+      "answer": 3,
+      "time": 10
+    },
+    {
+      "text": "Diésel a $27.32 MXN/L y 3 L/h en ralentí. Si un conductor deja el motor en ralentí 150 h al año, ¿cuánto cuesta?",
+      "options": ["≈ $1,229 MXN", "≈ $12,294 MXN", "≈ $122,940 MXN", "≈ $1,229,400 MXN"],
+      "answer": 2,
+      "time": 20
+    },
+    {
+      "text": "Para no contar como improductivo el ralentí con TDF, ¿qué tipo de entrada AUX debe tener el vehículo?",
+      "options": ["Barredora", "Luces de emergencia", "Power Take Off", "Equipment Activity"],
+      "answer": 3,
+      "time": 15
+    },
+    {
+      "text": "El conductor carga más combustible del que cabe en el tanque y guarda el resto. ¿Qué tipo de fraude es?",
+      "options": [
+        "Transacción fantasma",
+        "Uso compartido de tarjeta",
+        "Sobrellenado / robo de combustible",
+        "Doble cobro en estación"
+      ],
+      "answer": 3,
+      "time": 15
+    },
+    {
+      "text": "La inmovilización remota apaga el motor de inmediato, aunque el vehículo vaya en movimiento.",
+      "options": ["Verdadero", "Falso"],
+      "answer": 2,
+      "time": 10
+    },
+    {
+      "text": "Al presionar el Botón de Pánico, ¿qué video sube la cámara con IA?",
+      "options": [
+        "5 s antes y 5 s después",
+        "10 s antes y 20 s después",
+        "30 s antes y 30 s después",
+        "Ninguno: solo manda la ubicación"
+      ],
+      "answer": 2,
+      "time": 15
+    }
+  ]
+}
