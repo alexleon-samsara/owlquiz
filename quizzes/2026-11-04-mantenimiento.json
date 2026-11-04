@@ -1,0 +1,70 @@
+{
+  "title": "Mantenimiento · Academia Samsara CDMX",
+  "questions": [
+    {
+      "text": "Según los retos de clientes, ¿cuánto de su jornada dedican los técnicos a capturar datos a mano?",
+      "options": ["Cerca del 20 %", "Cerca del 40 %", "Más del 60 %", "Más del 90 %"],
+      "answer": 3,
+      "time": 10
+    },
+    {
+      "text": "La falta de refacciones, ¿qué retraso provoca incluso en reparaciones sencillas?",
+      "options": ["2 a 4 horas", "8 a 12 horas", "24 a 48 horas", "Una semana"],
+      "answer": 3,
+      "time": 10
+    },
+    {
+      "text": "¿Qué problemas detectan los modelos predictivos antes de que se active un código de falla?",
+      "options": ["Batería y DPF", "Llantas y frenos", "Aceite y filtros", "Luces y espejos"],
+      "answer": 1,
+      "time": 10
+    },
+    {
+      "text": "Los Códigos de falla mejorados identifican fallas de alto riesgo con inteligencia específica por…",
+      "options": ["Conductor", "Marca, modelo y año (MMY)", "Ruta", "Clima"],
+      "answer": 2,
+      "time": 10
+    },
+    {
+      "text": "En la gestión de garantías, ¿qué redacta el agente automáticamente para el reclamo?",
+      "options": ["La factura del taller", "La orden de compra", "Las 3C del reclamo", "El DVIR del conductor"],
+      "answer": 3,
+      "time": 15
+    },
+    {
+      "text": "Los recordatorios de mantenimiento preventivo se programan por…",
+      "options": [
+        "Solo por fecha",
+        "Solo por kilometraje",
+        "Tiempo, kilometraje u horas de motor",
+        "Consumo de combustible"
+      ],
+      "answer": 3,
+      "time": 10
+    },
+    {
+      "text": "Flota con taller externo que solo quiere saber qué falla y recibir recordatorios de PM. ¿Qué le basta?",
+      "options": ["Telemetría VG (básico)", "CAM · LIC-MAINT", "Integración con su ERP", "Una app del Marketplace"],
+      "answer": 1,
+      "time": 15
+    },
+    {
+      "text": "Samsara envía webhooks cuando cambia una orden de trabajo de mantenimiento.",
+      "options": ["Verdadero", "Falso"],
+      "answer": 2,
+      "time": 10
+    },
+    {
+      "text": "Taller propio con técnicos, órdenes de trabajo e inventario de refacciones. ¿Qué licencia conviene?",
+      "options": ["Telemetría VG (básico)", "CAM · LIC-MAINT", "Solo DVIR", "Ninguna, con el ERP basta"],
+      "answer": 2,
+      "time": 15
+    },
+    {
+      "text": "Samsara tiene un conector nativo para SAP, Oracle y NetSuite.",
+      "options": ["Verdadero", "Falso"],
+      "answer": 2,
+      "time": 10
+    }
+  ]
+}

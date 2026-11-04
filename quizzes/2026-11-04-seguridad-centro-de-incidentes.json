@@ -1,0 +1,80 @@
+{
+  "title": "Seguridad · Centro de Incidentes · Academia Samsara CDMX",
+  "questions": [
+    {
+      "text": "¿Cuántos robos a vehículos pesados se reportaron en México en 2025 (SESNSP)?",
+      "options": ["1,036", "5,200", "10,367", "25,000"],
+      "answer": 3,
+      "time": 10
+    },
+    {
+      "text": "¿Qué porcentaje de esos robos fue con violencia?",
+      "options": ["32 %", "52 %", "82 %", "92 %"],
+      "answer": 3,
+      "time": 10
+    },
+    {
+      "text": "Sin rastreo de activos, ¿cuánto tarda en recuperarse un activo robado?",
+      "options": ["2 días", "7 días", "25 días", "60 días"],
+      "answer": 3,
+      "time": 10
+    },
+    {
+      "text": "La metodología de seguridad Samsara es: Monitorear, Prevenir, Resolver y…",
+      "options": ["Reportar", "Optimizar", "Sancionar", "Facturar"],
+      "answer": 2,
+      "time": 10
+    },
+    {
+      "text": "¿Qué equipo ejecuta en el vehículo el comando \"inmovilizar\" del Centro de Incidentes?",
+      "options": ["Monitor de Puerta", "Sensor de Carga", "Inmovilizador de Motor 2.0", "Botón de Pánico"],
+      "answer": 3,
+      "time": 10
+    },
+    {
+      "text": "¿Qué equipo genera el evento de apertura no autorizada de la caja?",
+      "options": ["Monitor de Puerta", "Rastreador de Activos", "Cámara de Tablero con IA", "Sensor de Carga"],
+      "answer": 1,
+      "time": 10
+    },
+    {
+      "text": "¿Cómo detecta Samsara una posible interferencia GPS (jammer)?",
+      "options": [
+        "Un aviso que dice \"jammer detectado\"",
+        "Pérdida anómala y sostenida de la señal GPS del Gateway",
+        "Una llamada del operador",
+        "La cámara detecta el aparato"
+      ],
+      "answer": 2,
+      "time": 15
+    },
+    {
+      "text": "La Llamada en Cabina para contactar al operador durante un robo usa…",
+      "options": [
+        "El celular del conductor",
+        "La voz de ida y vuelta de la cámara con IA",
+        "Un radio de banda civil",
+        "Mensajes SMS"
+      ],
+      "answer": 2,
+      "time": 15
+    },
+    {
+      "text": "Algunos clientes detectan posibles extracciones cruzando una parada con…",
+      "options": ["RPM mayores a 800", "Velocidad mayor a 100 km/h", "Puerta abierta", "Temperatura alta del motor"],
+      "answer": 1,
+      "time": 15
+    },
+    {
+      "text": "¿Qué son las Functions de Samsara?",
+      "options": [
+        "Código en Python que corre en la nube de Samsara",
+        "Un tipo de cámara para remolques",
+        "Reportes PDF programados",
+        "Geocercas con horario"
+      ],
+      "answer": 1,
+      "time": 15
+    }
+  ]
+}
