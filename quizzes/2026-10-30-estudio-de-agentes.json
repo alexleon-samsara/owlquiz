@@ -24,27 +24,100 @@
       "time": 10
     },
     {
+      "text": "¿Con qué entrenas a un agente para que haga tus tareas?",
+      "options": [
+        "Solo con información de internet",
+        "Con tus documentos e instrucciones",
+        "Con llamadas de otras flotas",
+        "No se puede entrenar"
+      ],
+      "answer": 2,
+      "time": 10
+    },
+    {
       "text": "¿Dónde guardas una respuesta o reporte como página que todo tu equipo pueda consultar?",
-      "options": ["Asistente Samsara", "Estudio de Agentes", "Espacios de Samsara", "Conectores (MCP)"],
+      "options": [
+        "Asistente Samsara",
+        "Estudio de Agentes",
+        "Espacios de Samsara",
+        "Conectores (MCP)"
+      ],
       "answer": 3,
       "time": 15
     },
     {
       "text": "Quieres que tu ERP, TMS o tarjetas de combustible estén en el mismo contexto que Samsara. ¿Qué usas?",
-      "options": ["Espacios de Samsara", "Conectores (MCP)", "Asistente Samsara", "Estudio de Agentes"],
+      "options": [
+        "Espacios de Samsara",
+        "Conectores (MCP)",
+        "Asistente Samsara",
+        "Estudio de Agentes"
+      ],
       "answer": 2,
       "time": 15
     },
     {
-      "text": "Para crear un agente desde cero en el Estudio de Agentes hay que saber programar.",
-      "options": ["Verdadero", "Falso"],
+      "text": "¿Qué datos puede usar un agente de Samsara?",
+      "options": [
+        "Todos los datos de la cuenta, sin límite",
+        "Solo los que permiten tus permisos",
+        "Los de cualquier flota de Samsara",
+        "Solo datos públicos"
+      ],
       "answer": 2,
       "time": 10
     },
     {
+      "text": "Para crear un agente desde cero en el Estudio de Agentes hay que saber programar.",
+      "options": [
+        "Verdadero",
+        "Falso"
+      ],
+      "answer": 2,
+      "time": 10
+    },
+    {
+      "text": "Un conductor entra a una zona de trabajo. ¿Qué puede hacer un agente de forma automática?",
+      "options": [
+        "Apagar el motor",
+        "Cambiar la ruta en el TMS",
+        "Llamarle por la cámara con las instrucciones del lugar",
+        "Enviarle una multa"
+      ],
+      "answer": 3,
+      "time": 15
+    },
+    {
+      "text": "¿Cuál NO es una forma de llamar del agente de voz?",
+      "options": [
+        "Audio de la cámara de tablero",
+        "Llamada telefónica",
+        "Llamada desde el navegador",
+        "Mensaje de WhatsApp"
+      ],
+      "answer": 4,
+      "time": 15
+    },
+    {
       "text": "Antes de publicar un agente nuevo, ¿dónde lo pruebas?",
-      "options": ["En el Playground", "En el Marketplace", "En el Centro de Incidentes", "En la app del conductor"],
+      "options": [
+        "En el Playground",
+        "En el Marketplace",
+        "En el Centro de Incidentes",
+        "En la app del conductor"
+      ],
       "answer": 1,
+      "time": 10
+    },
+    {
+      "text": "Después de cada llamada del agente, ¿qué queda registrado?",
+      "options": [
+        "Nada, la llamada no se guarda",
+        "Solo la hora de la llamada",
+        "Un correo al gerente",
+        "El audio, la transcripción y el resultado"
+      ],
+      "answer": 4,
       "time": 10
     }
   ]
